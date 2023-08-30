@@ -12,6 +12,14 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
     && chown -R $USERNAME /commandhistory \
     && echo "$SNIPPET" >> "/home/$USERNAME/.bashrc"
 
+# Install Python
+RUN curl https://pyenv.run | bash
+ENV PYENV_ROOT /root/.pyenv
+ENV PATH $PYENV_ROOT/bin:$PATH
+
+RUN pyenv install 3.11 && pyenv global 3.11
+
+# Continue with Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
 RUN wget https://github.com/mozilla/grcov/releases/download/v0.8.18/grcov-x86_64-unknown-linux-gnu.tar.bz2 && tar -xvjf grcov-x86_64-unknown-linux-gnu.tar.bz2 -C /usr/local/bin
 RUN rustup component add llvm-tools-preview
@@ -22,3 +30,4 @@ RUN echo "export SCCACHE_BUCKET=sccache-aws-cli-dev" >> "/home/$USERNAME/.bashrc
     && echo "export RUSTC_WRAPPER=/usr/local/cargo/bin/sccache" >> "/home/$USERNAME/.bashrc" \
     && echo "export SCCACHE_REGION=us-west-2" >> "/home/$USERNAME/.bashrc" \
     && echo "export CARGO_INCREMENTAL=0" >> "/home/$USERNAME/.bashrc"
+
