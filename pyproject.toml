@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "rustifying-serverless"
+version = "0.1.0"
+description = "How to use Rust in your existing Serverless projects"
+authors = ["Efi Merdler-Kravitz <efi.merdler@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[tool.poetry.group.dev.dependencies]
+aws-lambda-powertools = {extras = ["aws-sdk"], version = "^2.23.1"}
+boto3 = "^1.28.37"
+black = "^23.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

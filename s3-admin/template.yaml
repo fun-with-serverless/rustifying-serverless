@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Manage your S3 buckets
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  AdminPasswordSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        PasswordLength: 16
+        ExcludeCharacters: ":"
+  RootApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: LambdaRequestAuthorizer
+        Authorizers:
+          LambdaRequestAuthorizer:
+            FunctionArn: !GetAtt AuthorizerPython.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              Headers:
+                - Authorization
+  AuthorizerPython:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: authorizer_python/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref AdminPasswordSecret
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: auth
+          LOG_LEVEL: INFO
+          SECRETAUTH_PARAM_NAME: !Ref AdminPasswordSecret
+      Architectures:
+        - x86_64
+  ListBuckets:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: list_buckets/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:ListAllMyBuckets
+              Resource: "*"
+      Architectures:
+        - x86_64
+      Events:
+        ListBcukets:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RootApi
+            Path: /buckets
+            Method: get
+
+Outputs:
+  S3AdminApiList:
+    Value: !Sub "curl https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets"
+  S3AdminApiDelete:
+    Value: !Sub "curl -X DELETE https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets/{bucket-name}"
