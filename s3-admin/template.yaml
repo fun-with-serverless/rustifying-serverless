@@ -68,6 +68,6 @@ Resources:
 
 Outputs:
   S3AdminApiList:
-    Value: !Sub "curl https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets"
-  S3AdminApiDelete:
-    Value: !Sub "curl -X DELETE https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets/{bucket-name}"
+    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets"
+  PasswordSecretURL:
+    Value: !Sub "https://us-east-1.console.aws.amazon.com/secretsmanager/secret?name=${AdminPasswordSecret}"
