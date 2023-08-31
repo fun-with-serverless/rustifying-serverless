@@ -54,6 +54,7 @@ Resources:
             - Effect: Allow
               Action:
                 - s3:ListAllMyBuckets
+                - s3:GetBucketLocation
               Resource: "*"
       Architectures:
         - x86_64

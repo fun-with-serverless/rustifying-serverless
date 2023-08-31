@@ -13,6 +13,7 @@ python = "^3.11"
 aws-lambda-powertools = {extras = ["aws-sdk"], version = "^2.23.1"}
 boto3 = "^1.28.37"
 black = "^23.7.0"
+ipython = "^8.14.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,10 +1,10 @@
 from typing import List
 from aws_lambda_powertools import Logger
-from aws_lambda_powertools.event_handler import APIGatewayHttpResolver
+from aws_lambda_powertools.event_handler import APIGatewayRestResolver
 import boto3
 
 logger = Logger()
-app = APIGatewayHttpResolver()
+app = APIGatewayRestResolver()
 s3_client = boto3.client("s3")
 
 

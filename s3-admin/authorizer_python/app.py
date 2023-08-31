@@ -29,7 +29,7 @@ def lambda_handler(event: APIGatewayAuthorizerRequestEvent, context):
     arn = event.parsed_arn
     policy = APIGatewayAuthorizerResponse(
         principal_id=user,
-        context=user,
+        context={"user":user},
         region=arn.region,
         aws_account_id=arn.aws_account_id,
         api_id=arn.api_id,
@@ -37,6 +37,7 @@ def lambda_handler(event: APIGatewayAuthorizerRequestEvent, context):
     )
 
     policy.allow_all_routes()
+    logger.info("Policy for user", policy=policy.asdict())
     return policy.asdict()
 
 
@@ -52,4 +53,5 @@ def get_user_by_token(token: Optional[str]) -> Optional[str]:
         ) and password == parameters.get_secret(os.environ["SECRETAUTH_PARAM_NAME"]):
             logger.info("User logged in")
             return USER
+    logger.info("User not found")
     return None
