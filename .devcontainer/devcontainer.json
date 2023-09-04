@@ -6,7 +6,8 @@
         "ghcr.io/devcontainers/features/aws-cli:1": {},
         "ghcr.io/devcontainers-contrib/features/poetry:2": {},
         "ghcr.io/devcontainers/features/rust:1": {},
-        "ghcr.io/customink/codespaces-features/sam-cli:1": {}
+        "ghcr.io/customink/codespaces-features/sam-cli:1": {},
+        "ghcr.io/devcontainers/features/node:1": {}
 
     },
     "mounts": [
@@ -15,6 +16,7 @@
         "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind"
     ],
     "onCreateCommand": {
-        "start-sccache": "sccache --start-server"
+        "start-sccache": "sccache --start-server",
+        "install-poe": "pipx install poethepoet"
     }
 }

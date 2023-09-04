@@ -4,7 +4,7 @@ Description: Manage your S3 buckets
 
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10
 
 Resources:
   AdminPasswordSecret:
@@ -42,10 +42,10 @@ Resources:
           SECRETAUTH_PARAM_NAME: !Ref AdminPasswordSecret
       Architectures:
         - x86_64
-  ListBuckets:
+  ListBucketsPython:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: list_buckets/
+      CodeUri: list_buckets_python/
       Handler: app.lambda_handler
       Runtime: python3.11
       Policies:
@@ -59,15 +59,41 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        ListBcukets:
+        ListBcuketsPython:
           Type: Api
           Properties:
             RestApiId: !Ref RootApi
-            Path: /buckets
+            Path: /buckets-python
+            Method: get
+
+  ListBucketsRust:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: list_buckets_rust/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:ListAllMyBuckets
+                - s3:GetBucketLocation
+              Resource: "*"
+      Architectures:
+        - x86_64
+      Events:
+        ListBcuketsRust:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RootApi
+            Path: /buckets-rust
             Method: get
 
 Outputs:
-  S3AdminApiList:
-    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets"
+  S3AdminApiListPython:
+    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-python"
+  S3AdminApiListRust:
+    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust"
   PasswordSecretURL:
     Value: !Sub "https://us-east-1.console.aws.amazon.com/secretsmanager/secret?name=${AdminPasswordSecret}"
