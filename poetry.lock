@@ -145,6 +145,25 @@ urllib3 = ">=1.25.4,<1.27"
 crt = ["awscrt (==0.16.26)"]
 
 [[package]]
+name = "cargo-lambda"
+version = "0.20.4"
+description = "Cargo subcommand to work with AWS Lambda"
+optional = false
+python-versions = "*"
+files = [
+    {file = "cargo_lambda-0.20.4-py3-none-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:786339f67f9314fcb142b593e76c1fb69f245d04aa36b0b25e42bf4e7398ad30"},
+    {file = "cargo_lambda-0.20.4-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:cb15c2bd80986fc1f20c218c73a9a427f89e11200d014227e00885713b0c3611"},
+    {file = "cargo_lambda-0.20.4-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:2d2245ff4e2bed38dc9128294c29a88105a1c737bdb0d92ebd3266d08f66c294"},
+    {file = "cargo_lambda-0.20.4-py3-none-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:81d73ec054dd88059f81708f71c1d27c47f5ff921c6b75cecef0b1234c50901a"},
+    {file = "cargo_lambda-0.20.4-py3-none-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:7e2dbbd800ecfd5745c1f377f877efeda847148e926df28f112a6f1f67dc44f6"},
+    {file = "cargo_lambda-0.20.4-py3-none-win32.whl", hash = "sha256:8af5a28259e87ab4805b36bcb5e1da023062eedc6f2477c5f40bde999198ea73"},
+    {file = "cargo_lambda-0.20.4-py3-none-win_amd64.whl", hash = "sha256:c6a8a4b2548c6a732b54f719d3760bdbfdd6fbf2183987aba39e2eee06911895"},
+]
+
+[package.dependencies]
+ziglang = ">=0.10.0"
+
+[[package]]
 name = "click"
 version = "8.1.7"
 description = "Composable command line interface toolkit"
@@ -593,4 +612,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0042986ccf5206adb494b90eca347ee1fe81a7734de3084c72035f6b30d02a68"
+content-hash = "9209c218c73c8154725cbe19e776fb22e15ecb250116927cc4bcb4c508e7e51a"

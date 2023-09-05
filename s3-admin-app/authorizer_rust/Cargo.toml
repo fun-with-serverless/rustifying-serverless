@@ -1,0 +1,19 @@
+[package]
+name = "authorizer-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.75"
+aws-config = "0.56.1"
+aws-sdk-secretsmanager = "0.30.0"
+aws_lambda_events = { version = "0.10.0", default-features = false, features = ["apigw"] }
+base64 = "0.21.3"
+lambda_runtime = "0.8.1"
+serde = "1.0.136"
+serde_json = "1.0.105"
+tokio = { version = "1", features = ["macros"] }
+tracing = { version = "0.1", features = ["log"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
