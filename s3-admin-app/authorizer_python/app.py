@@ -9,7 +9,6 @@ from aws_lambda_powertools.utilities.data_classes.api_gateway_authorizer_event i
     DENY_ALL_RESPONSE,
     APIGatewayAuthorizerRequestEvent,
     APIGatewayAuthorizerResponse,
-    HttpVerb,
 )
 
 logger = Logger()
@@ -29,7 +28,7 @@ def lambda_handler(event: APIGatewayAuthorizerRequestEvent, context):
     arn = event.parsed_arn
     policy = APIGatewayAuthorizerResponse(
         principal_id=user,
-        context={"user":user},
+        context={"user": user},
         region=arn.region,
         aws_account_id=arn.aws_account_id,
         api_id=arn.api_id,

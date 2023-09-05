@@ -9,6 +9,7 @@ stack_name = "s3-admin"
 [default.build.parameters]
 cached = true
 parallel = true
+beta_features = true
 
 [default.validate.parameters]
 lint = true
@@ -26,6 +27,7 @@ resolve_s3 = true
 
 [default.sync.parameters]
 watch = true
+beta_features = true
 
 [default.local_start_api.parameters]
 warm_containers = "EAGER"

@@ -13,7 +13,20 @@ Resources:
       GenerateSecretString:
         PasswordLength: 16
         ExcludeCharacters: ":"
-  RootApi:
+  RootApiRust:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: LambdaRequestAuthorizer
+        Authorizers:
+          LambdaRequestAuthorizer:
+            FunctionArn: !GetAtt AuthorizerRust.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              Headers:
+                - Authorization
+  RootApiPython:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
@@ -26,6 +39,7 @@ Resources:
             Identity:
               Headers:
                 - Authorization
+
   AuthorizerPython:
     Type: AWS::Serverless::Function
     Properties:
@@ -39,6 +53,22 @@ Resources:
         Variables:
           POWERTOOLS_SERVICE_NAME: auth
           LOG_LEVEL: INFO
+          SECRETAUTH_PARAM_NAME: !Ref AdminPasswordSecret
+      Architectures:
+        - x86_64
+  AuthorizerRust:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: rust-cargolambda 
+    Properties:
+      CodeUri: ./authorizer_rust 
+      Handler: bootstrap
+      Runtime: provided.al2
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref AdminPasswordSecret
+      Environment:
+        Variables:
           SECRETAUTH_PARAM_NAME: !Ref AdminPasswordSecret
       Architectures:
         - x86_64
@@ -62,7 +92,7 @@ Resources:
         ListBcuketsPython:
           Type: Api
           Properties:
-            RestApiId: !Ref RootApi
+            RestApiId: !Ref RootApiPython
             Path: /buckets-python
             Method: get
 
@@ -86,14 +116,14 @@ Resources:
         ListBcuketsRust:
           Type: Api
           Properties:
-            RestApiId: !Ref RootApi
+            RestApiId: !Ref RootApiRust
             Path: /buckets-rust
             Method: get
 
 Outputs:
   S3AdminApiListPython:
-    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-python"
+    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApiPython}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-python"
   S3AdminApiListRust:
-    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust"
+    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust"
   PasswordSecretURL:
     Value: !Sub "https://us-east-1.console.aws.amazon.com/secretsmanager/secret?name=${AdminPasswordSecret}"
