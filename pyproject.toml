@@ -16,12 +16,15 @@ python = "^3.11"
 
 [tool.poetry.group.dev.dependencies]
 aws-lambda-powertools = {extras = ["aws-sdk"], version = "^2.23.1"}
-boto3 = "^1.28.37"
 black = "^23.7.0"
 ipython = "^8.14.0"
 maturin = {extras = ["zig"], version = "^1.2.3"}
 wheel = "^0.41.2"
 cargo-lambda = "^0.20.4"
+aiobotocore = "^2.6.0"
+uvloop = "^0.17.0"
+aiolimiter = "^1.1.0"
+s3-ops-rust = {path = ".rust-lib/s3_ops_rust-0.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"}
 
 [build-system]
 requires = ["poetry-core"]

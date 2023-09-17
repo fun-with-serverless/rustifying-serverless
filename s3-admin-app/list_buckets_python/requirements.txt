@@ -1,2 +1,4 @@
-boto3
+aiobotocore
 aws-lambda-powertools
+uvloop
+aiolimiter
