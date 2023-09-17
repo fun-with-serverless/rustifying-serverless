@@ -65,11 +65,11 @@ Resources:
       Handler: bootstrap
       Runtime: provided.al2
       Policies:
-        - AWSSecretsManagerGetSecretValuePolicy:
-            SecretArn: !Ref AdminPasswordSecret
+        - DynamoDBReadPolicy:
+            TableName: !Ref UsersTable
       Environment:
         Variables:
-          SECRETAUTH_PARAM_NAME: !Ref AdminPasswordSecret
+          USERS_TABLE_NAME: !Ref UsersTable
       Architectures:
         - x86_64
   ListBucketsPython:

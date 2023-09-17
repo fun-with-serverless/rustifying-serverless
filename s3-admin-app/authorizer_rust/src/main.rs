@@ -3,18 +3,16 @@ use aws_lambda_events::apigw::{
     ApiGatewayCustomAuthorizerPolicy, ApiGatewayCustomAuthorizerRequestTypeRequest,
     ApiGatewayCustomAuthorizerResponse, IamPolicyStatement,
 };
-use aws_sdk_secretsmanager::Client;
+use aws_sdk_dynamodb::types::AttributeValue;
+use aws_sdk_dynamodb::Client;
 use base64::decode;
 use lambda_runtime::{service_fn, Error, LambdaEvent};
 use serde_json::json;
-use std::collections::HashMap;
 use std::env;
 use std::option::Option;
 use std::str;
-use std::sync::{Mutex, Arc, MutexGuard};
 
-const DEFAULT_USER: &'static str = "admin";
-const SECRET_AUTH_PARAM_NAME_ENV_VARIABLE: &'static str = "SECRETAUTH_PARAM_NAME";
+const USERS_TABLE_NAME_ENV: &'static str = "USERS_TABLE_NAME";
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -25,11 +23,9 @@ async fn main() -> Result<(), Error> {
 
     let shared_config = aws_config::load_from_env().await;
     let client = Client::new(&shared_config);
-    let cache = Arc::new(Mutex::new(HashMap::<String, String>::new()));
     let func = service_fn(move |event| {
         let client_ref = client.clone();
-        let cache_ref = cache.clone();
-        async move { function_handler(event, &client_ref, &cache_ref).await }
+        async move { function_handler(event, &client_ref).await }
     });
 
     lambda_runtime::run(func).await?;
@@ -39,17 +35,15 @@ async fn main() -> Result<(), Error> {
 async fn function_handler(
     event: LambdaEvent<ApiGatewayCustomAuthorizerRequestTypeRequest>,
     client: &Client,
-    cache: &Arc<std::sync::Mutex<HashMap<std::string::String, std::string::String>>>,
 ) -> Result<ApiGatewayCustomAuthorizerResponse, Error> {
     let method_arn = event
         .payload
         .method_arn
         .as_ref()
         .context("Method ARN is missing")?;
-    let cache = cache.lock().unwrap();
     if let Some(header_value) = event.payload.headers.get("authorization") {
         if let Ok(token_str) = str::from_utf8(header_value.as_bytes()) {
-            let user_result = get_user_by_token(token_str, client, cache).await?;
+            let user_result = get_user_by_token(token_str, client).await?;
             let user = user_result.unwrap_or(String::from("NoUser"));
             let policy = if user == "NoUser" { "DENY" } else { "ALLOW" };
             return Ok(custom_authorizer_response(policy, &user, method_arn));
@@ -81,30 +75,30 @@ fn custom_authorizer_response(
     }
 }
 
-async fn get_user_by_token(token: &str, client: &Client, mut cache: MutexGuard<'_, HashMap<String, String>>) -> Result<Option<String>, Error> {
+async fn get_user_by_token(token: &str, client: &Client) -> Result<Option<String>, Error> {
     if token.starts_with("Basic") {
         let decoded_auth = decode(&token[6..]).unwrap();
         let decoded_str = String::from_utf8(decoded_auth).unwrap();
         let split: Vec<&str> = decoded_str.split(":").collect();
         let (username, password) = (split[0], split[1]);
 
-        let login_user = env::var("LOGIN_USER").unwrap_or(DEFAULT_USER.to_string());
-        let secret_param = env::var(SECRET_AUTH_PARAM_NAME_ENV_VARIABLE).unwrap();
-        
-        let mut secret = cache.get(SECRET_AUTH_PARAM_NAME_ENV_VARIABLE).cloned();
+        let table_name = env::var(USERS_TABLE_NAME_ENV).unwrap();
 
-        if secret.is_none() {
-            // Fetch secret asynchronously and update the cache
-            let fetched_secret = client.get_secret_value().secret_id(&secret_param).send().await?;
-            secret = fetched_secret.secret_string.clone();
-            
-            if let Some(s) = secret.clone() {
-                cache.insert(SECRET_AUTH_PARAM_NAME_ENV_VARIABLE.to_string(), s);
-            }
+        let item = client
+            .get_item()
+            .table_name(table_name)
+            .key("user", AttributeValue::S(String::from(username)))
+            .send()
+            .await?;
+
+        if item.item.is_none() {
+            return Ok(None);
         }
 
-        if username == login_user && Some(password) == secret.as_deref() {
-            return Ok(Some(login_user));
+        let value = item.item.unwrap();
+
+        if password == value.get("password").unwrap().as_s().unwrap() {
+            return Ok(Some(String::from(username)));
         }
     }
     Ok(None)

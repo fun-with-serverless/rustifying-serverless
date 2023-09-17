@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.75"
 aws-config = "0.56.1"
-aws-sdk-secretsmanager = "0.30.0"
+aws-sdk-dynamodb = "0.30.0"
 aws_lambda_events = { version = "0.10.0", default-features = false, features = ["apigw"] }
 base64 = "0.21.3"
 lambda_runtime = "0.8.1"
