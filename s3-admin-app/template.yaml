@@ -7,12 +7,6 @@ Globals:
     Timeout: 10
 
 Resources:
-  AdminPasswordSecret:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      GenerateSecretString:
-        PasswordLength: 16
-        ExcludeCharacters: ":"
   RootApiRust:
     Type: AWS::Serverless::Api
     Properties:
@@ -47,13 +41,13 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.11
       Policies:
-        - AWSSecretsManagerGetSecretValuePolicy:
-            SecretArn: !Ref AdminPasswordSecret
+        - DynamoDBReadPolicy:
+            TableName: !Ref UsersTable
       Environment:
         Variables:
           POWERTOOLS_SERVICE_NAME: auth
           LOG_LEVEL: INFO
-          SECRETAUTH_PARAM_NAME: !Ref AdminPasswordSecret
+          USERS_TABLE_NAME: !Ref UsersTable
       Architectures:
         - x86_64
   AuthorizerRust:
@@ -65,11 +59,11 @@ Resources:
       Handler: bootstrap
       Runtime: provided.al2
       Policies:
-        - AWSSecretsManagerGetSecretValuePolicy:
-            SecretArn: !Ref AdminPasswordSecret
+        - DynamoDBReadPolicy:
+            TableName: !Ref UsersTable
       Environment:
         Variables:
-          SECRETAUTH_PARAM_NAME: !Ref AdminPasswordSecret
+          USERS_TABLE_NAME: !Ref UsersTable
       Architectures:
         - x86_64
   ListBucketsPython:
@@ -120,10 +114,21 @@ Resources:
             Path: /buckets-rust
             Method: get
 
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: user
+          AttributeType: S
+      KeySchema:
+        - AttributeName: user
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+       
 Outputs:
   S3AdminApiListPython:
-    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApiPython}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-python"
+    Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiPython}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-python"
   S3AdminApiListRust:
-    Value: !Sub "curl -u 'admin:<your pass>' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust"
-  PasswordSecretURL:
-    Value: !Sub "https://us-east-1.console.aws.amazon.com/secretsmanager/secret?name=${AdminPasswordSecret}"
+    Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust"
+  DynamoDB:
+    Value: !Sub "aws dynamodb put-item --table-name ${UsersTable} --item '{\"user\": {\"S\": \"admin\"}, \"password\": {\"S\": \"CTax;#+9+X3T%|z\"}}' --return-consumed-capacity TOTAL"

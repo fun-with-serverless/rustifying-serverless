@@ -3,7 +3,7 @@ from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities.data_classes import event_source
 import base64
 from aws_lambda_powertools.utilities import parameters
-
+import boto3
 import os
 from aws_lambda_powertools.utilities.data_classes.api_gateway_authorizer_event import (
     DENY_ALL_RESPONSE,
@@ -12,7 +12,8 @@ from aws_lambda_powertools.utilities.data_classes.api_gateway_authorizer_event i
 )
 
 logger = Logger()
-USER = "admin"
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table(os.environ["USERS_TABLE_NAME"])
 
 
 @logger.inject_lambda_context(log_event=True)
@@ -46,11 +47,10 @@ def get_user_by_token(token: Optional[str]) -> Optional[str]:
         decoded_auth = base64.b64decode(token[6:]).decode()
         username, password = decoded_auth.split(":")
 
-        # Check if the username and password match the expected values
-        if username == os.environ.get(
-            "LOGIN_USER", USER
-        ) and password == parameters.get_secret(os.environ["SECRETAUTH_PARAM_NAME"]):
+        response = table.get_item(Key={"user": username})
+        item = response.get("Item")
+        if item and password == item["password"]:
             logger.info("User logged in")
-            return USER
+            return username
     logger.info("User not found")
     return None
