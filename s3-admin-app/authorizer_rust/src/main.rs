@@ -8,6 +8,7 @@ use aws_sdk_dynamodb::Client;
 use base64::decode;
 use lambda_runtime::{service_fn, Error, LambdaEvent};
 use serde_json::json;
+use tracing::info;
 use std::env;
 use std::option::Option;
 use std::str;
@@ -90,16 +91,20 @@ async fn get_user_by_token(token: &str, client: &Client) -> Result<Option<String
             .key("user", AttributeValue::S(String::from(username)))
             .send()
             .await?;
-
-        if item.item.is_none() {
-            return Ok(None);
-        }
-
-        let value = item.item.unwrap();
+       
+        let value = match item.item {
+            Some(value) => value,
+            None => {
+                info!("NotApproved");
+                return Ok(None);
+            }
+        };
 
         if password == value.get("password").unwrap().as_s().unwrap() {
+            info!("Approved");
             return Ok(Some(String::from(username)));
         }
     }
+    info!("NotApproved");
     Ok(None)
 }

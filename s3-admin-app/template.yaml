@@ -7,12 +7,6 @@ Globals:
     Timeout: 10
 
 Resources:
-  AdminPasswordSecret:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      GenerateSecretString:
-        PasswordLength: 16
-        ExcludeCharacters: ":"
   RootApiRust:
     Type: AWS::Serverless::Api
     Properties:
@@ -136,7 +130,5 @@ Outputs:
     Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiPython}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-python"
   S3AdminApiListRust:
     Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust"
-  PasswordSecretURL:
-    Value: !Sub "https://us-east-1.console.aws.amazon.com/secretsmanager/secret?name=${AdminPasswordSecret}"
   DynamoDB:
     Value: !Sub "aws dynamodb put-item --table-name ${UsersTable} --item '{\"user\": {\"S\": \"admin\"}, \"password\": {\"S\": \"CTax;#+9+X3T%|z\"}}' --return-consumed-capacity TOTAL"
