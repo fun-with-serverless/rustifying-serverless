@@ -5,6 +5,11 @@ Description: Manage your S3 buckets
 Globals:
   Function:
     Timeout: 10
+    Layers: 
+      - arn:aws:lambda:us-east-1:234138278568:layer:analytics-extension:8
+    Environment:
+        Variables:
+          ANALYTICS_SQS_URL: !Ref AnalyticsSQS
 
 Resources:
   RootApiRust:
@@ -114,6 +119,25 @@ Resources:
             Path: /buckets-rust
             Method: get
 
+  GetS3Details:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: get-s3-details/
+      Handler: app.lambdaHandler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      Policies:
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt AnalyticsSQS.QueueName
+      Events:
+        GetS3Details:
+          Type: Api
+          Properties:
+              RestApiId: !Ref RootApiRust
+              Path: /get-bucket
+              Method: get
+
   UsersTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -124,11 +148,16 @@ Resources:
         - AttributeName: user
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
+  
+  AnalyticsSQS:
+    Type: AWS::SQS::Queue
        
 Outputs:
   S3AdminApiListPython:
     Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiPython}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-python"
   S3AdminApiListRust:
     Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust"
+  GetS3DetailsNode:
+    Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/get-bucket"
   DynamoDB:
     Value: !Sub "aws dynamodb put-item --table-name ${UsersTable} --item '{\"user\": {\"S\": \"admin\"}, \"password\": {\"S\": \"CTax;#+9+X3T%|z\"}}' --return-consumed-capacity TOTAL"
