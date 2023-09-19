@@ -1,0 +1,18 @@
+[package]
+name = "analytics-extension"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+aws-config = "0.56.1"
+aws-sdk-sqs = "0.30.0"
+axum = { version = "0.6.20", default-features = false, features = ["tokio", "json", "matched-path", "http1"] }
+lambda-extension = "0.8.1"
+serde = "1.0.188"
+serde_json = "1.0.107"
+tokio = { version = "1.32.0", features = ["macros"] }
+tokio-stream = "0.1.14"
+tracing = { version = "0.1.37", features = ["log"] }
+tracing-subscriber = { version = "0.3.17", default-features = false, features = ["fmt", "env-filter"] }
