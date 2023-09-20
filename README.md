@@ -25,7 +25,8 @@ This repository serves as a companion to our talk at AWS ReInvent. The talk, tit
 This repository illustrates the journey that led us to this point.
 
 ## Architecture
-![Architecture Diagram](https://github.com/fun-with-serverless/rustifying-serverless/assets/110536677/7492fcfc-2da3-4f09-b163-92f4262e1c2f)
+![Architecture Diagram](https://github.com/fun-with-serverless/rustifying-serverless/assets/110536677/7950f8d2-1e80-4681-8938-339ef6b203f6)
+
 - The architecture consists of an API Gateway with a Lambda authorizer.
 - Multiple Lambda functions are connected to the API Gateway. These functions interact with services like S3 and DynamoDB.
 - We have multiple runtimes, mostly Python, but also NodeJS.
@@ -35,17 +36,17 @@ There are primarily three ways to integrate Rust:
 
 ### 1. Rust Bindings
 - Use Pyo3 with maturin to create a `.whl` package for use in your Python Lambda.
-- Example code can be found under `<path for the github code>`.
+- Example code can be found under [s3-ops-rust-lib](./s3-ops-rust-lib).
 - **Benefits**: Speed of development and no need to rewrite the Lambda function.
 
 ### 2. Rewrite the Lambda
 - Use `cargo-lambda` and AWS SAM to deploy a full-fledged Rust Lambda.
-- Example code can be found under `<path for the github code>`.
+- Example code can be found under [s3-admin-app/authorizer_rust](./s3-admin-app/authorizer_rust).
 - **Benefits**: Reduced cold starts, thanks to the Rust runtime.
 
 ### 3. Use Extensions
 - Use extensions to address cross-cutting concerns, such as analytics reporting, using a fast language like Rust.
-- Example code can be found under `<path for the github code>`.
+- Example code can be found under [analytics-extension](./analytics-extension).
 - **Benefits**: Reduce Lambda latency by offloading tasks to an external process.
 
 ## Building the Example
@@ -67,7 +68,7 @@ There are primarily three ways to integrate Rust:
   # Build the application and deploy it.
   poe build-and-deploy
   ```
-- The main application resides in `s3-admin-app`,  Rust bindings are in `s3-ops-rust-lib` and the extension in `analytics-extension`.
+- The main application is located in `s3-admin-app`, the Rust bindings are in `s3-ops-rust-lib`, and the extension is in `analytics-extension`.
 
 ## Local development
  ```bash
