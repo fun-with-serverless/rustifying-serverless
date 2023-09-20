@@ -65,12 +65,16 @@ There are primarily three ways to integrate Rust:
   poetry install --only=rust-dev-tools
   # Build the rust package
   poe build-lib
-  # Build the application and deploy it.
-  poe build-and-deploy
+  # Build and deploy the extension
+  poe build-and-deploy-extension
   ```
-- The main application is located in `s3-admin-app`, the Rust bindings are in `s3-ops-rust-lib`, and the extension is in `analytics-extension`.
+- Update [s3-asmin-app/template.yaml](./s3-admin-app/template.yaml) with the ARN of the extension under `Globals/Layers`.
+- Build the application and deploy it - `poe build-and-deploy-app`
+- To create a new user in the 'users' table, follow the AWS SAM output. For example `aws dynamodb put-item --table-name ...`
+- Make API calls to the various APIs as defined in the AWS SAM output.
 
 ## Local development
+The main application resides in `s3-admin-app`,  Rust bindings are in `s3-ops-rust-lib` and the extension in `analytics-extension`.
  ```bash
   # Install dev tools used for rust compilation.
   poetry install --only=rust-dev-tools
