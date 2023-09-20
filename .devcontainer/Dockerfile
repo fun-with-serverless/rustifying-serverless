@@ -24,7 +24,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash 
 RUN wget https://github.com/mozilla/grcov/releases/download/v0.8.18/grcov-x86_64-unknown-linux-gnu.tar.bz2 && tar -xvjf grcov-x86_64-unknown-linux-gnu.tar.bz2 -C /usr/local/bin
 RUN rustup component add llvm-tools-preview
 RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-RUN cargo install cargo-audit && cargo install sccache && cargo install cargo-edit && cargo install --locked cargo-lambda
+RUN cargo install cargo-audit && cargo install sccache && cargo install cargo-edit
 RUN echo "export SCCACHE_BUCKET=sccache-aws-cli-dev" >> "/home/$USERNAME/.bashrc" \
     && echo "export SCCACHE_S3_USE_SSL=true" >> "/home/$USERNAME/.bashrc" \
     && echo "export RUSTC_WRAPPER=/usr/local/cargo/bin/sccache" >> "/home/$USERNAME/.bashrc" \

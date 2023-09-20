@@ -340,18 +340,18 @@ crt = ["awscrt (==0.16.26)"]
 
 [[package]]
 name = "cargo-lambda"
-version = "0.20.4"
+version = "0.21.1"
 description = "Cargo subcommand to work with AWS Lambda"
 optional = false
 python-versions = "*"
 files = [
-    {file = "cargo_lambda-0.20.4-py3-none-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:786339f67f9314fcb142b593e76c1fb69f245d04aa36b0b25e42bf4e7398ad30"},
-    {file = "cargo_lambda-0.20.4-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:cb15c2bd80986fc1f20c218c73a9a427f89e11200d014227e00885713b0c3611"},
-    {file = "cargo_lambda-0.20.4-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:2d2245ff4e2bed38dc9128294c29a88105a1c737bdb0d92ebd3266d08f66c294"},
-    {file = "cargo_lambda-0.20.4-py3-none-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:81d73ec054dd88059f81708f71c1d27c47f5ff921c6b75cecef0b1234c50901a"},
-    {file = "cargo_lambda-0.20.4-py3-none-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:7e2dbbd800ecfd5745c1f377f877efeda847148e926df28f112a6f1f67dc44f6"},
-    {file = "cargo_lambda-0.20.4-py3-none-win32.whl", hash = "sha256:8af5a28259e87ab4805b36bcb5e1da023062eedc6f2477c5f40bde999198ea73"},
-    {file = "cargo_lambda-0.20.4-py3-none-win_amd64.whl", hash = "sha256:c6a8a4b2548c6a732b54f719d3760bdbfdd6fbf2183987aba39e2eee06911895"},
+    {file = "cargo_lambda-0.21.1-py3-none-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:f64038d84feaceb94285cd7c64696410de75a4540f30fff4c48c6993f16dec22"},
+    {file = "cargo_lambda-0.21.1-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b56c148dc145566e92bb9b65e8f42372597b3dc296a71cde708034ef525a288e"},
+    {file = "cargo_lambda-0.21.1-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:1f38c477c258838707894ff787d0e6e12d643d40801c7876a43a84bff0961b87"},
+    {file = "cargo_lambda-0.21.1-py3-none-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:964b85c88c962aea3c3906a32d64fb7cd4ca49e1a53f25b0551fdd76e3465df7"},
+    {file = "cargo_lambda-0.21.1-py3-none-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:229dc24baaefe2fe4c5faa4f259f8fc419a683844031dc5535407a872604e29e"},
+    {file = "cargo_lambda-0.21.1-py3-none-win32.whl", hash = "sha256:19f7a54b50d58fb25baa1377bf34df2be886c300966e49835606e2ac6ff04e4d"},
+    {file = "cargo_lambda-0.21.1-py3-none-win_amd64.whl", hash = "sha256:8a785dd3e2c03631bc3063ca51993d3d2d56b0d623e6992d7c992312a84742e2"},
 ]
 
 [package.dependencies]
@@ -676,9 +676,6 @@ files = [
     {file = "maturin-1.2.3.tar.gz", hash = "sha256:ef3f42af453d64f233b99543c3001bee645019a9c2022c7972210a9cacb5301f"},
 ]
 
-[package.dependencies]
-ziglang = {version = ">=0.10.0,<0.11.0", optional = true, markers = "extra == \"zig\""}
-
 [package.extras]
 patchelf = ["patchelf"]
 zig = ["ziglang (>=0.10.0,<0.11.0)"]
@@ -920,20 +917,6 @@ files = [
 
 [package.dependencies]
 six = ">=1.5"
-
-[[package]]
-name = "s3_ops_rust"
-version = "0.1.0"
-description = ""
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "s3_ops_rust-0.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2d6b98d11ebc4180b8dc6534880f447c4430150eb76f38d1b28f2665853491f3"},
-]
-
-[package.source]
-type = "file"
-url = ".rust-lib/s3_ops_rust-0.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
 
 [[package]]
 name = "s3transfer"
@@ -1266,21 +1249,21 @@ multidict = ">=4.0"
 
 [[package]]
 name = "ziglang"
-version = "0.10.1.post1"
+version = "0.11.0"
 description = "Zig is a general-purpose programming language and toolchain for maintaining robust, optimal, and reusable software."
 optional = false
 python-versions = "~=3.5"
 files = [
-    {file = "ziglang-0.10.1.post1-py3-none-macosx_10_9_x86_64.whl", hash = "sha256:49c34715d17057e0ddfb0ef809cac4909d37636359c7e12d675f40d375b0d856"},
-    {file = "ziglang-0.10.1.post1-py3-none-macosx_11_0_arm64.whl", hash = "sha256:aa0ed478daa6aace75e2e56d0bd5d526493fb6bd03159a30e9a5e0123b2bcf7e"},
-    {file = "ziglang-0.10.1.post1-py3-none-manylinux_2_12_i686.manylinux2010_i686.musllinux_1_1_i686.whl", hash = "sha256:3e7ce24665f7fbbe9317e10a3c349589e857181860d60c66e739e7a7f1d24f50"},
-    {file = "ziglang-0.10.1.post1-py3-none-manylinux_2_12_x86_64.manylinux2010_x86_64.musllinux_1_1_x86_64.whl", hash = "sha256:e9f7aa2c6a44dd23fb0c11722eaaca2626272ef52ac1aeb20fe8d761ca490638"},
-    {file = "ziglang-0.10.1.post1-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.musllinux_1_1_aarch64.whl", hash = "sha256:563c7e65e133f1710a8c9503b1e4a450b034490402a15ce61d1ce9dc5d4beb9b"},
-    {file = "ziglang-0.10.1.post1-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.musllinux_1_1_armv7l.whl", hash = "sha256:7fc4f015d06d64099549e1697f8ebfe95e5a2b107d348c207f17c0b1fa4e0616"},
-    {file = "ziglang-0.10.1.post1-py3-none-win_amd64.whl", hash = "sha256:567b1a06923b8b7e0dbbfe2dbaf60f5683b69706b1982d21e29c2e618b5354b0"},
+    {file = "ziglang-0.11.0-py3-none-macosx_10_9_x86_64.whl", hash = "sha256:bd046eeab97ad51048575768f6dae10468b3a4449f4467ed61dae621faf6ee55"},
+    {file = "ziglang-0.11.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:038b95cac9adef0c6dce9b72bdad895a0e4e0654c77c4a8f84fe79d2909a366e"},
+    {file = "ziglang-0.11.0-py3-none-manylinux_2_12_i686.manylinux2010_i686.musllinux_1_1_i686.whl", hash = "sha256:4f848c8cca520cb12357cfa3d303bf1149a30566f4c1e5999284dbdf921cc2b8"},
+    {file = "ziglang-0.11.0-py3-none-manylinux_2_12_x86_64.manylinux2010_x86_64.musllinux_1_1_x86_64.whl", hash = "sha256:45e8116428267e20529b9ee43a7e7364791c1a092845d2143b248a1dbf6760b0"},
+    {file = "ziglang-0.11.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.musllinux_1_1_aarch64.whl", hash = "sha256:d6372bada34714a5395539cc4d76e9cc6062739cee5ce9949a250f7c525ceb94"},
+    {file = "ziglang-0.11.0-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.musllinux_1_1_armv7l.whl", hash = "sha256:5fe81f91fd872fc32ed0f82807df6c680a82cbea56a9f24f818e9da299049022"},
+    {file = "ziglang-0.11.0-py3-none-win_amd64.whl", hash = "sha256:a7edc7020e7ffbbb3af3a40c17a9bda65d5a65132ff933e153ffa80d8f5ad731"},
 ]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "8e3cffbd7595b291a2fe6f097c354b2e0d6455fe0ef5529a2f20c9e5393439a6"
+content-hash = "772b309c456b49dcc0fae65e6093d202a364baf1aabff8369ccbad179cb8bf3e"
