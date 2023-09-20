@@ -16,7 +16,6 @@
         "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind"
     ],
     "onCreateCommand": {
-        "start-sccache": "sccache --start-server",
         "install-poe": "pipx install poethepoet"
     }
 }
