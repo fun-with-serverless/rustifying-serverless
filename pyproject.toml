@@ -8,7 +8,10 @@ readme = "README.md"
 [tool.poe.tasks]
 build-lib="maturin build -m s3-ops-rust-lib/Cargo.toml --strip --release --zig -o .rust-lib"
 deploy-app={shell = "cd s3-admin-app && sam build --no-cached && sam deploy"}
-build-and-deploy=["build-lib","deploy-app"]
+build-and-deploy-app=["build-lib","deploy-app"]
+build-extension="cargo lambda build --manifest-path analytics-extension/Cargo.toml --extension --release"
+deploy-extension="cargo lambda deploy --manifest-path analytics-extension/Cargo.toml --extension"
+build-and-deploy-extension=["build-extension", "deploy-extension"]
 update-dependencies={shell = "poetry remove s3-ops-rust && poetry add .rust-lib/s3_ops_rust-0.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --group dev"}
 
 [tool.poetry.dependencies]
