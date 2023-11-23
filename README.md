@@ -1,7 +1,3 @@
-:construction: Work in Progress: This repository is currently under active development. Features may be incomplete, and documentation may not be up-to-date. Please proceed with caution and feel free to contribute! :construction:
-
-
-
 # Rust in Serverless Applications: A ReInvent Talk Example
 
 ## Introduction
