@@ -1,7 +1,7 @@
-# Rust in Serverless Applications: A ReInvent Talk Example
+# “Rustifying” serverless: Boost AWS Lambda performance with Rust (COM306)
 
 ## Introduction
-This repository serves as a companion to our talk at AWS ReInvent. The talk, titled "“Rustifying” serverless: Boost AWS Lambda performance with Rust", explores how to leverage the performance and security advantages of Rust in serverless AWS Lambda functions. For more details and to watch the talk, visit [ReInvent Talk](https://hub.reinvent.awsevents.com/attendee-portal/catalog/?search=com306).
+This repository serves as a companion to my talk at AWS ReInvent. The talk, titled "“Rustifying” serverless: Boost AWS Lambda performance with Rust", explores how to leverage the performance advantages of Rust in serverless AWS Lambda functions. For more details and to watch the talk, visit [ReInvent Talk](https://www.youtube.com/watch?v=Mdh_2PXe9i8).
 
 ## Background Story
 ### The Journey
