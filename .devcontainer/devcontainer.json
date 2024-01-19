@@ -16,6 +16,7 @@
         "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind"
     ],
     "onCreateCommand": {
-        "install-poe": "pipx install poethepoet"
+        "install-poe": "pipx install poethepoet",
+        "install-napi": "npm install -g @napi-rs/cli"
     }
 }
