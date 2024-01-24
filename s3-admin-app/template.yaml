@@ -101,7 +101,7 @@ Resources:
     Properties:
       CodeUri: list-buckets-node/
       Handler: app.lambdaHandler
-      Runtime: nodejs18.x
+      Runtime: nodejs20.x
       Policies:
         - Version: "2012-10-17"
           Statement:
