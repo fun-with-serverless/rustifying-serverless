@@ -1,10 +1,10 @@
 use aws_config::BehaviorVersion;
 use aws_sdk_s3::{types::BucketLocationConstraint, Client, Error};
 use futures::{stream::FuturesUnordered, StreamExt};
-use tokio::runtime::Runtime;
 use napi_derive::napi;
+use tokio::runtime::Runtime;
 
-#[napi]
+#[napi(object)]
 pub struct BucketDetails {
   pub name: String,
   pub location: String,

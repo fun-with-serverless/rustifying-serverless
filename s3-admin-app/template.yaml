@@ -71,6 +71,7 @@ Resources:
           USERS_TABLE_NAME: !Ref UsersTable
       Architectures:
         - x86_64
+
   ListBucketsPython:
     Type: AWS::Serverless::Function
     Properties:
@@ -95,10 +96,59 @@ Resources:
             Path: /buckets-python
             Method: get
 
-  ListBucketsRust:
+  ListBucketsNode:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: list_buckets_rust/
+      CodeUri: list-buckets-node/
+      Handler: app.lambdaHandler
+      Runtime: nodejs18.x
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:ListAllMyBuckets
+                - s3:GetBucketLocation
+              Resource: "*"
+      Architectures:
+        - x86_64
+      Events:
+        ListBucketsNode:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RootApiPython
+            Path: /buckets-node
+            Method: get
+
+  ListBucketsRustNode:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: list-buckets-rust-node/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:ListAllMyBuckets
+                - s3:GetBucketLocation
+              Resource: "*"
+      Architectures:
+        - x86_64
+      Events:
+        ListBucketsRustNode:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RootApiRust
+            Path: /buckets-rust-node
+            Method: get
+  
+
+  ListBucketsRustPython:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: list_buckets_rust_python/
       Handler: app.lambda_handler
       Runtime: python3.11
       Policies:
@@ -112,11 +162,11 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        ListBcuketsRust:
+        ListBucketsRustPython:
           Type: Api
           Properties:
             RestApiId: !Ref RootApiRust
-            Path: /buckets-rust
+            Path: /buckets-rust-python
             Method: get
 
   GetS3Details:
@@ -153,10 +203,14 @@ Resources:
     Type: AWS::SQS::Queue
        
 Outputs:
+  S3AdminApiListNode:
+    Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiPython}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-node"
   S3AdminApiListPython:
     Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiPython}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-python"
   S3AdminApiListRust:
-    Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust"
+    Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust-python"
+  S3AdminApiListNodeRust:
+    Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/buckets-rust-node"
   GetS3DetailsNode:
     Value: !Sub "curl -u 'admin:CTax;#+9+X3T%|z' https://${RootApiRust}.execute-api.${AWS::Region}.amazonaws.com/Prod/get-bucket"
   DynamoDB:
