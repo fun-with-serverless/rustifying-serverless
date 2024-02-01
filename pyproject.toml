@@ -6,10 +6,10 @@ authors = ["Efi Merdler-Kravitz <efi.merdler@gmail.com>"]
 readme = "README.md"
 
 [tool.poe.tasks]
-build-lib = "maturin build -m s3-ops-rust-lib/Cargo.toml --strip --release --zig -o .rust-lib"
+build-python-lib = "maturin build -m s3-ops-rust-pyo3-lib/Cargo.toml --strip --release --zig -o .rust-lib"
 build-node-lib = { shell = "napi build --platform --release --config ./s3-ops-rust-napi-lib/package.json --cargo-cwd ./s3-ops-rust-napi-lib && mv s3-ops-rust-napi-lib.linux-x64-gnu.node index.js index.d.ts ./s3-admin-app/list-buckets-rust-node" }
 deploy-app = { shell = "cd s3-admin-app && sam build --no-cached && sam deploy" }
-build-and-deploy-app = ["build-lib", "build-node-lib", "deploy-app"]
+build-and-deploy-app = ["build-python-lib", "build-node-lib", "deploy-app"]
 build-extension = "cargo lambda build --manifest-path analytics-extension/Cargo.toml --extension --release"
 deploy-extension = "cargo lambda deploy --manifest-path analytics-extension/Cargo.toml --extension"
 build-and-deploy-extension = ["build-extension", "deploy-extension"]

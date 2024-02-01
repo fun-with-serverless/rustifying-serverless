@@ -47,7 +47,7 @@ async fn list_buckets_internal(client: &Client) -> Result<Vec<(String, String)>,
                         .location_constraint()
                         .unwrap_or(&BucketLocationConstraint::UsWest1)
                         .as_str();
-                    Ok((String::from(bucket_name.clone()), String::from(location)))
+                    Ok((String::from(bucket_name), String::from(location)))
                 }
                 Err(e) => Err(e),
             }

@@ -281,6 +281,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { S3OpsRust } = nativeBinding
+const { S3OpsRust, sign } = nativeBinding
 
 module.exports.S3OpsRust = S3OpsRust
+module.exports.sign = sign

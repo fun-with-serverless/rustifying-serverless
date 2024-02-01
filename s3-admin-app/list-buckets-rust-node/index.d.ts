@@ -7,6 +7,7 @@ export interface BucketDetails {
   name: string
   location: string
 }
+export function sign(host: string, url: string): Promise<string>
 export class S3OpsRust {
   constructor()
   listBuckets(): Array<BucketDetails>

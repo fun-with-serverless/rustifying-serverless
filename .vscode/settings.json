@@ -4,7 +4,7 @@
     },
     "python.formatting.provider": "none",
     "rust-analyzer.linkedProjects": [
-        "s3-ops-rust-lib/Cargo.toml",
+        "s3-ops-rust-pyo3-lib/Cargo.toml",
         "s3-admin-app/authorizer_rust/Cargo.toml",
         "analytics-extension/Cargo.toml",
         "s3-ops-rust-napi-lib/Cargo.toml"
