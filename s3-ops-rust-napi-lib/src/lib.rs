@@ -3,7 +3,6 @@ use aws_sdk_s3::{types::BucketLocationConstraint, Client, Error};
 use futures::{stream::FuturesUnordered, StreamExt};
 use napi_derive::napi;
 use tokio::runtime::Runtime;
-use aws_credential_types::provider::ProvideCredentials;
 
 #[napi(object)]
 pub struct BucketDetails {
@@ -71,42 +70,4 @@ async fn list_buckets_internal(client: &Client) -> Result<Vec<BucketDetails>, Er
   let bucket_locations: Vec<BucketDetails> = results.into_iter().filter_map(Result::ok).collect();
 
   Ok(bucket_locations)
-}
-
-#[napi]
-pub async fn sign(host: String, url: String) -> napi::Result<String> {
-  let config = aws_config::load_defaults(BehaviorVersion::v2023_11_09()).await;
-  let credentials = config.credentials_provider();
-  if let Some(credentials) = credentials {
-    let credentials = credentials.provide_credentials().await.expect("Err");
-
-    let datetime = chrono::Utc::now();
-    let mut headers = http::header::HeaderMap::new();
-
-    headers.insert(
-      "X-Amz-Date",
-      datetime
-        .format("%Y%m%dT%H%M%SZ")
-        .to_string()
-        .parse()
-        .unwrap(),
-    );
-    headers.insert("host", host.parse().unwrap());
-
-    let s = aws_sign_v4::AwsSign::new(
-      "GET",
-      url.as_str(),
-      &datetime,
-      &headers,
-      "us-east-1",
-      credentials.access_key_id(),
-      credentials.secret_access_key(),
-      "execute-api",
-      "",
-    );
-    let signature = s.sign();
-    Ok(signature)
-  } else {
-    Err(napi::Error::from_reason("No credentials found"))
-  }
 }

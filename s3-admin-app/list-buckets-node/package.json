@@ -7,10 +7,7 @@
   "author": "SAM CLI",
   "license": "MIT",
   "dependencies": {
-    "@aws-crypto/sha256-browser": "^5.2.0",
-    "@aws-sdk/client-s3": "^3.498.0",
-    "@aws-sdk/credential-provider-node": "^3.504.0",
-    "@smithy/signature-v4": "^2.1.1"
+    "@aws-sdk/client-s3": "^3.498.0"
   },
   "scripts": {}
 }
