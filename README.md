@@ -31,9 +31,15 @@ This repository illustrates the journey that led us to this point.
 There are primarily three ways to integrate Rust:
 
 ### 1. Rust Bindings
+#### Python
 - Use Pyo3 with maturin to create a `.whl` package for use in your Python Lambda.
-- Example code can be found under [s3-ops-rust-lib](./s3-ops-rust-lib).
-- **Benefits**: Speed of development and no need to rewrite the Lambda function.
+- Example code can be found under [s3-ops-rust-pyo3-lib](./s3-ops-rust-pyo3-lib).
+
+#### NodeJS
+- Use NAPI-RS to package and build your code. A one stop CLI, unlike Python where you need to use teo tools.
+- Examples can be found under [s3-ops-rust-napi-lib](./s3-ops-rust-napi-lib).
+
+**Benefits**: Speed of development and no need to rewrite the Lambda function.
 
 ### 2. Rewrite the Lambda
 - Use `cargo-lambda` and AWS SAM to deploy a full-fledged Rust Lambda.
@@ -53,14 +59,21 @@ There are primarily three ways to integrate Rust:
   - Poetry
   - Poe 
   - AWS SAM
-  - NodeJS 18
+  - NodeJS 20
   - AWS CLI
+  - NAPI-RS
+- Prepare the NodeJS Rust Library by running:
+```
+cd s3-ops-rust-napi-lib
+npm i
+``` 
 - We use `poetry` for build management. To build and deploy, run:
   ```bash
   # Install dev tools used for rust compilation.
   poetry install --only=rust-dev-tools
   # Build the rust package
-  poe build-lib
+  poe build-python-lib
+  poe build-node-lib
   # Build and deploy the extension
   poe build-and-deploy-extension
   ```
@@ -75,7 +88,8 @@ The main application resides in `s3-admin-app`,  Rust bindings are in `s3-ops-ru
   # Install dev tools used for rust compilation.
   poetry install --only=rust-dev-tools
   # Build the rust package
-  poe build-lib
+  poe build-python-lib
+  poe build-node-lib
   # Add the local rust package
   poetry add .rust-lib/s3_ops_rust-0.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --group dev 
   poetry install
