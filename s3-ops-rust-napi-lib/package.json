@@ -1,0 +1,40 @@
+{
+  "name": "s3-ops-rust-napi-lib",
+  "version": "0.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "napi": {
+    "name": "s3-ops-rust-napi-lib",
+    "triples": {
+      "defaults": false,
+      "additional": [
+        "aarch64-unknown-linux-gnu",
+        "x86_64-unknown-linux-gnu"
+      ]
+    }
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@napi-rs/cli": "^2.17.0",
+    "ava": "^5.1.1"
+  },
+  "ava": {
+    "timeout": "3m"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
+    "prepublishOnly": "napi prepublish -t npm",
+    "universal": "napi universal",
+    "version": "napi version"
+  },
+  "packageManager": "yarn@4.0.2",
+  "optionalDependencies": {
+    "s3-ops-rust-napi-lib-linux-arm64-gnu": "0.0.0",
+    "s3-ops-rust-napi-lib-linux-x64-gnu": "0.0.0"
+  }
+}
